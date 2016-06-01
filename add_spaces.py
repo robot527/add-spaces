@@ -85,12 +85,11 @@ def add_spaces_to_ustring(ustr):
         newstring = newstring + char_list[i]
     return newstring
 
-def add_spaces_to_file(file_name):
+def add_spaces_to_file(file_name, code="gbk"):
     """给文本文件添加合理的空格。"""
     try:
         with open(file_name, 'r+') as text:
-            #line_list = [add_spaces_to_ustring(unicode(line.rstrip(), "UTF-8")).encode('UTF-8') + '\n' for line in text]
-            line_list = [add_spaces_to_ustring(line.rstrip().decode("UTF-8")).encode('UTF-8') + '\n' for line in text]
+            line_list = [add_spaces_to_ustring(line.rstrip().decode(code)).encode(code) + '\n' for line in text]
             text.seek(0)
             text.truncate(0)
             text.writelines(line_list)
@@ -100,11 +99,17 @@ def add_spaces_to_file(file_name):
 
 
 if __name__ == '__main__':
-    print 'Please input a file name.'
-    print 'Usage - "test.txt", "/home/user/test/abc.md"'
-    target_file = raw_input("@> ")
-    if target_file is '':
-        target_file = 'test.txt'
-    print 'Target file is ' + target_file + '  !\n'
-    add_spaces_to_file(target_file)
-    print 'Process is completed.'
+    import sys
+    argc = len(sys.argv)
+    if argc == 1:
+        print 'Usage: python add_spaces.py filename code'
+    elif argc == 2:
+        add_spaces_to_file(sys.argv[1])
+        print 'Process is completed.'
+    elif argc == 3:
+        add_spaces_to_file(sys.argv[1], sys.argv[2])
+        print 'Process is completed.'
+    else:
+        print 'Usage: python add_spaces.py filename code'
+        print '    or python add_spaces.py filename'
+
