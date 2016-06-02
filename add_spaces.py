@@ -86,14 +86,21 @@ def add_spaces_to_ustring(ustr):
     return newstring
 
 def add_spaces_to_file(file_name, code="gbk"):
-    """给文本文件添加合理的空格。"""
+    """给文本文件的内容添加合理的空格, 生成处理过的新文件。"""
+    import os.path
+    dir_name = os.path.dirname(file_name)
+    base_name = os.path.basename(file_name)
+    #print dir_name==''
+    if dir_name == '':
+        new_file = code + "-" + base_name
+    else:
+        new_file = dir_name + "/" + code + "-" + base_name
+    #print new_file
     try:
-        with open(file_name, 'r+') as text:
+        with open(file_name) as text, open(new_file, "w") as nfile:
             line_list = [add_spaces_to_ustring(line.rstrip().decode(code)).encode(code) + '\n' for line in text]
-            text.seek(0)
-            text.truncate(0)
-            text.writelines(line_list)
-            print 'Finished adding spaces.'
+            nfile.writelines(line_list)
+            print 'Finished adding spaces, generated new file: %s' % new_file
     except IOError as err:
         print 'File error: ' + str(err)
 
@@ -102,7 +109,7 @@ if __name__ == '__main__':
     import sys
     argc = len(sys.argv)
     if argc == 1:
-        print 'Usage: python add_spaces.py filename code'
+        print 'Usage: python add_spaces.py filename code(e.g. gbk, utf8)'
     elif argc == 2:
         add_spaces_to_file(sys.argv[1])
         print 'Process is completed.'
