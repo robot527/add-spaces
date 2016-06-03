@@ -88,35 +88,41 @@ def add_spaces_to_ustring(ustr):
 def add_spaces_to_file(file_name, code="gbk"):
     """给文本文件的内容添加合理的空格, 生成处理过的新文件。"""
     import os.path
+    from os import system
     dir_name = os.path.dirname(file_name)
     base_name = os.path.basename(file_name)
-    #print dir_name==''
     if dir_name == '':
         new_file = code + "-" + base_name
     else:
         new_file = dir_name + "/" + code + "-" + base_name
-    #print new_file
     try:
         with open(file_name) as text, open(new_file, "w") as nfile:
             line_list = [add_spaces_to_ustring(line.rstrip().decode(code)).encode(code) + '\n' for line in text]
             nfile.writelines(line_list)
             print 'Finished adding spaces, generated new file: %s' % new_file
+            return "success"
+    except UnicodeDecodeError:
+        cmd = "rm -f " + new_file
+        system(cmd)
+        return "decodeError"
     except IOError as err:
         print 'File error: ' + str(err)
+        return "fileError"
 
 
 if __name__ == '__main__':
     import sys
     argc = len(sys.argv)
+    codeset = ['gb2312', 'gbk', 'utf8', 'gb18030', 'hz', 'iso2022_jp_2', 'big5', 'big5hkscs']
     if argc == 1:
-        print 'Usage: python add_spaces.py filename code(e.g. gbk, utf8)'
+        print 'Usage: python add_spaces.py /path/to/file code(e.g. gbk, utf8)'
+        print '    or python add_spaces.py /path/to/file'
     elif argc == 2:
-        add_spaces_to_file(sys.argv[1])
-        print 'Process is completed.'
+        for item in codeset:
+            if add_spaces_to_file(sys.argv[1], item) != "decodeError":
+                print 'Process is completed.'
+                break
     elif argc == 3:
         add_spaces_to_file(sys.argv[1], sys.argv[2])
-        print 'Process is completed.'
     else:
-        print 'Usage: python add_spaces.py filename code'
-        print '    or python add_spaces.py filename'
-
+        print 'Usage: python add_spaces.py /path/to/file code'
