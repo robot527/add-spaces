@@ -75,6 +75,8 @@
 
 > 刚刚买了一部 iPhone ，好开心！
 
+## [贡献](https://github.com/robot527/add-spaces/blob/master/Contributing.md)
+
 ## 参考
 
 - [中文文案排版指北](https://github.com/LCTT/TranslateProject/blob/master/%E4%B8%AD%E6%96%87%E6%8E%92%E7%89%88%E6%8C%87%E5%8C%97.md#%E4%B8%AD%E8%8B%B1%E6%96%87%E4%B9%8B%E9%97%B4%E9%9C%80%E8%A6%81%E5%A2%9E%E5%8A%A0%E7%A9%BA%E6%A0%BC)
