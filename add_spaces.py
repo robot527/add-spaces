@@ -31,8 +31,16 @@ def isalpha(uni_ch):
         return False
 
 
+def is_en_symbol(uni_ch):
+    """判断一个 unicode 是否是英文符号。"""
+    if uni_ch in [u':', u';', u'%', u'!', u'?', u'`', u'°']:
+        return True
+    else:
+        return False
+
+
 def is_en_l_bracket(uni_ch):
-    """判断一个 unicode 是否英文左括号。"""
+    """判断一个 unicode 是否是英文左括号。"""
     if uni_ch == u'(' or uni_ch == u'[':
         return True
     else:
@@ -40,7 +48,7 @@ def is_en_l_bracket(uni_ch):
 
 
 def is_en_r_bracket(uni_ch):
-    """判断一个 unicode 是否英文右括号。"""
+    """判断一个 unicode 是否是英文右括号。"""
     if uni_ch == u')' or uni_ch == u']':
         return True
     else:
@@ -48,7 +56,7 @@ def is_en_r_bracket(uni_ch):
 
 
 def is_zh_l_bracket(uni_ch):
-    """判断一个 unicode 是否中文左括号。"""
+    """判断一个 unicode 是否是中文左括号。"""
     if uni_ch == u'\uff08':
         return True
     else:
@@ -56,7 +64,7 @@ def is_zh_l_bracket(uni_ch):
 
 
 def is_zh_r_bracket(uni_ch):
-    """判断一个 unicode 是否中文右括号。"""
+    """判断一个 unicode 是否是中文右括号。"""
     if uni_ch == u'\uff09':
         return True
     else:
@@ -80,8 +88,12 @@ def add_spaces_to_ustring(ustr):
             elif (is_chinese(ch_lst[i]) and is_en_l_bracket(ch_lst[i + 1])) \
                 or (is_en_r_bracket(ch_lst[i]) and is_chinese(ch_lst[i + 1])):
                 ch_lst[i] += u" "
+            #中文与英文符号之间需要增加空格
+            elif (is_chinese(ch_lst[i]) and is_en_symbol(ch_lst[i + 1])) \
+                or (is_en_symbol(ch_lst[i]) and is_chinese(ch_lst[i + 1])):
+                ch_lst[i] += u" "
             #中文(括号)与数字之间需要增加空格
-            if (is_chinese(ch_lst[i]) and isdigit(ch_lst[i + 1]))\
+            elif (is_chinese(ch_lst[i]) and isdigit(ch_lst[i + 1]))\
                 or (isdigit(ch_lst[i]) and is_chinese(ch_lst[i + 1])):
                 ch_lst[i] += u" "
             elif (isdigit(ch_lst[i]) and is_zh_l_bracket(ch_lst[i + 1]))\
@@ -94,7 +106,6 @@ def add_spaces_to_ustring(ustr):
 def add_spaces_to_file(file_name, code="gbk"):
     """给文本文件的内容添加合理的空格, 生成处理过的新文件。"""
     import os.path
-    from os import system
     dir_name = os.path.dirname(file_name)
     base_name = os.path.basename(file_name)
     if dir_name == '':
@@ -102,17 +113,19 @@ def add_spaces_to_file(file_name, code="gbk"):
     else:
         new_file = dir_name + "/" + code + "-" + base_name
     try:
-        with open(file_name) as text, open(new_file, "w") as nfile:
+        with open(file_name) as text:
             line_list = [add_spaces_to_ustring( \
                             line.rstrip().decode(code)).encode(code) \
                             + '\n' for line in text]
+    except UnicodeDecodeError as err:
+        return str(err)
+    except IOError as err:
+        return str(err)
+    try:
+        with open(new_file, "w") as nfile:
             nfile.writelines(line_list)
             print 'Finished adding spaces, generated new file: %s' % new_file
             return 'Success.'
-    except UnicodeDecodeError as err:
-        cmd = "rm -f " + new_file
-        system(cmd)
-        return str(err)
     except IOError as err:
         return str(err)
 
