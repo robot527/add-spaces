@@ -103,6 +103,23 @@ def add_spaces_to_ustring(ustr):
         newstring = newstring + ch_lst[i]
     return newstring
 
+
+def add_space_betw_digit_and_unit(string):
+    """给数字与单位之间增加空格。"""
+    from re import sub
+    # 常用单位，不齐全
+    units = ['bps', 'Kbps', 'Mbps', 'Gbps',
+            'B', 'KB', 'MB', 'GB', 'TB', 'PB',
+            'g', 'Kg', 't',
+            'h', 'm', 's']
+    for unit in units:
+        pattern = '(?<=\d)' + unit #positive lookbehind assertion,
+                                    #如果前面是括号中 '=' 后面的字符串，则匹配成功
+        repl = ' ' + unit
+        string = sub(pattern, repl, string)
+    return string
+
+
 def add_spaces_to_file(file_name, code="gbk"):
     """给文本文件的内容添加合理的空格, 生成处理过的新文件。"""
     import os.path
@@ -117,6 +134,8 @@ def add_spaces_to_file(file_name, code="gbk"):
             line_list = [add_spaces_to_ustring( \
                             line.rstrip().decode(code)).encode(code) \
                             + '\n' for line in text]
+            line_list = [add_space_betw_digit_and_unit(line) \
+                            for line in line_list]
     except UnicodeDecodeError as err:
         return str(err)
     except IOError as err:
