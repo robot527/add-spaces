@@ -132,8 +132,8 @@ def add_spaces_to_file(file_name, code="gbk"):
     try:
         with open(file_name) as text:
             line_list = [add_spaces_to_ustring( \
-                            line.rstrip().decode(code)).encode(code) \
-                            + '\n' for line in text]
+                            line.decode(code)).encode(code) \
+                            for line in text]
             line_list = [add_space_betw_digit_and_unit(line) \
                             for line in line_list]
     except UnicodeDecodeError as err:
