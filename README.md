@@ -12,7 +12,7 @@
 
 ```
 	python add_spaces.py /path/to/file code  # e.g. gbk, utf8
-	# or
+	# 或者自动猜测文本文件的编码
 	python add_spaces.py /path/to/file
 ```
 
@@ -86,7 +86,7 @@
 
 > 刚刚买了一部 iPhone ，好开心！
 
-## [贡献](https://github.com/robot527/add-spaces/blob/master/Contributing.md)
+## [贡献](./Contributing.md)
 
 ## 参考
 
