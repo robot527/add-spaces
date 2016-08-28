@@ -71,11 +71,12 @@ def is_zh_r_bracket(uni_ch):
         return False
 
 
-def add_spaces_to_ustring(ustr):
-    """给 unicode 字符串添加合理的空格。"""
+def add_spaces_to_string(string, code):
+    """给字符串添加合理的空格。"""
     from re import sub
-    newstring = ""
+    newustr = ""
     flag = 0
+    ustr = string.decode(code)
     ch_lst = list(ustr)
     length = len(ch_lst)
     for i in range(0, length):
@@ -103,14 +104,16 @@ def add_spaces_to_ustring(ustr):
                 or (is_zh_r_bracket(ch_lst[i]) and isdigit(ch_lst[i + 1])):
                 ch_lst[i] += u" "
 
-        newstring += ch_lst[i]
+        newustr += ch_lst[i]
+    newstring = newustr.encode(code)
     if flag == 1:
         #处理中文里的粗体字和斜体字
         newstring = sub(r' \* ', '*', newstring)
         newstring = sub(r' \*\* ', '**', newstring)
         newstring = sub(' _ ', '_', newstring)
         newstring = sub(' __ ', '__', newstring)
-    return newstring
+
+    return add_space_betw_digit_and_unit(newstring)
 
 
 def add_space_betw_digit_and_unit(string):
@@ -140,11 +143,8 @@ def add_spaces_to_file(file_name, code="gbk"):
         new_file = dir_name + "/" + code + "-" + base_name
     try:
         with open(file_name) as text:
-            line_list = [add_spaces_to_ustring( \
-                            line.decode(code)).encode(code) \
+            line_list = [add_spaces_to_string(line, code) \
                             for line in text]
-            line_list = [add_space_betw_digit_and_unit(line) \
-                            for line in line_list]
     except UnicodeDecodeError as err:
         return str(err)
     except IOError as err:
