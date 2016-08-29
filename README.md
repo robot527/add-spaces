@@ -11,10 +11,15 @@
 ## 脚本用法
 
 ```
-	python add_spaces.py /path/to/file code  # e.g. gbk, utf8
+	python add_spaces.py /path/to/file code  # code 为文件编码，如：gbk, utf8
 	# 或者自动猜测文本文件的编码
 	python add_spaces.py /path/to/file
 ```
+
+## 更新历史  
+### 更新时间：2016-08-28
+  - 支持对中文里有粗体或斜体英文单词的语句的处理
+  - 支持对中文里有粗体或斜体中文字词的语句的处理
 
 ## 空格
 
