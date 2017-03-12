@@ -33,7 +33,9 @@ def isalpha(uni_ch):
 
 def is_en_symbol(uni_ch):
     """判断一个 unicode 是否是英文符号。"""
-    if uni_ch in [u':', u';', u'%', u'!', u'?', u'`', u'°', u'*', u'_']:
+    if uni_ch in [u':', u';', u'%', u'!', u'?', u'`', u'°', u'*', u'_',\
+            u'<', u'=', u'>', u'"', u'$', u'&', u'\'', u',', u'.', u'~',\
+            u'/', u'@', u'\\', u'^', u'|']:
         return True
     else:
         return False
@@ -125,7 +127,7 @@ def add_space_betw_digit_and_unit(string):
             'g', 'Kg', 't',
             'h', 'm', 's']
     for unit in units:
-        pattern = '(?<=\d)' + unit #positive lookbehind assertion,
+        pattern = r'(?<=\d)' + unit #positive lookbehind assertion,
                                     #如果前面是括号中 '=' 后面的字符串，则匹配成功
         repl = ' ' + unit
         string = sub(pattern, repl, string)
