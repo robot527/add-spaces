@@ -3,9 +3,7 @@
 
 如果你想要给 [add-spaces](https://github.com/robot527/add-spaces) 做贡献，请按以下步骤进行：
 
-1. 点击 `fork` 按钮：
-
-    ![fork](https://raw.githubusercontent.com/robot527/add-spaces/master/images/fork.jpg)
+1. 点击 [fork](https://github.com/login?return_to=%2Frobot527%2Fadd-spaces) 按钮。
 
 2. 通过如下命令从你的 GitHub 帐号 `clone` 这个库： 
 
